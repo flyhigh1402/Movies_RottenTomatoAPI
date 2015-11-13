@@ -43,10 +43,11 @@ Run the following in command-line:
  1. Pod install
  2. Open Movies.xcworkspace
 
+![Video Walkthrough](lab_1.gif)
 
 ### Walkthrough
 ![Video Walkthrough](/Users/huyngo/Desktop/lab_1.gif)
-_/Users/huyngo/Desktop/lab_1.gif
+-/Users/huyngo/Desktop/lab_1.gif
 
 
 Credits
