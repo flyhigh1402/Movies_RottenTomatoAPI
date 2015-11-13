@@ -45,8 +45,8 @@ Run the following in command-line:
 
 
 ### Walkthrough
-![Video Walkthrough](http://i.imgur.com/SQnEp6P.gifv)
-/Users/huyngo/Desktop/lab_1.gif
+![Video Walkthrough](/Users/huyngo/Desktop/lab_1.gif)
+_/Users/huyngo/Desktop/lab_1.gif
 
 
 Credits
