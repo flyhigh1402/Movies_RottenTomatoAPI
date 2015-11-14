@@ -311,7 +311,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="dvdCell" rowHeight="131" id="OFI-lW-9tJ" customClass="DVDsCell" customModule="Movies" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="131"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="131"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OFI-lW-9tJ" id="dMR-En-AV6">
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="130.5"/>

@@ -50,7 +50,7 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
         moviestableView.dataSource = self
         moviescollectionView.delegate = self
         moviescollectionView.dataSource = self
-    
+        
         searchBar.delegate = self
         searchBar.placeholder = "search here"
         searchBar.barStyle = UIBarStyle.BlackTranslucent
@@ -77,18 +77,20 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
      
     }
     
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         if(searchActive) {
+            print("return filterMovies \(filterMovies.count)")
             return filterMovies.count
         }
+        print("return movies \(movies.count)")
         return movies.count;
     }
 
 
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         var cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath) as! movieTableViewCell
         var movie : NSDictionary = NSDictionary()
-        if(searchActive){
+        if(searchActive && filterMovies.count > 0) {
             movie = filterMovies[indexPath.row]
             
         } else {
@@ -104,7 +106,7 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.posterImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) in
                 cell.posterImageView.alpha = 0.0
                 cell.posterImageView.image = image
-                UIView.animateWithDuration(1.0, animations: {
+                UIView.animateWithDuration(1.5, animations: {
                     cell.posterImageView.alpha = 1.0
                 })
                 }, failure: nil)
@@ -163,6 +165,10 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
+//    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+//        view.endEditing(true)
+//        searchActive = false
+//    }
 
     
     // MARK: - Navigation
@@ -192,6 +198,9 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func fetchMovie(){
+        print("fetch movie search false")
+        searchActive = false
+        view.endEditing(true)
         //if isConnectedToNetwork() == true {
         self.searchBar.hidden = false
         self.noNetworkView.hidden = true
@@ -201,15 +210,17 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             guard error == nil else  {
-                self.noNetworkView.hidden = false
-                self.searchBar.hidden = true
-                self.moviestableView.reloadData()
-                UIView.animateWithDuration(1.0, animations: { () -> Void in
-                    self.noNetworkView.frame = CGRect(x:0,y:65, width:self.noNetworkView.frame.width, height:  self.noNetworkView.frame.height)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.noNetworkView.hidden = false
+                    self.searchBar.hidden = true
+                    self.moviestableView.reloadData()
+                    UIView.animateWithDuration(0.2, animations: { () -> Void in
+                        self.noNetworkView.frame = CGRect(x:0,y:65, width:self.noNetworkView.frame.width, height:  self.noNetworkView.frame.height)
+                    })
+                    CozyLoadingActivity.hide(success: false, animated: true)
+                    self.refreshControl.endRefreshing()
+                    self.moviestableView.reloadData()
                 })
-                CozyLoadingActivity.hide(success: false, animated: true)
-                self.refreshControl.endRefreshing()
-                self.moviestableView.reloadData()
                 print("error loading from URL", error!)
                 return
             }
@@ -279,13 +290,16 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true;
+      //  print("searchBarTextDidBeginEditing true")
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+     //   print("searchBarTextDidEndEditing false")
         searchActive = false;
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+      //  print("searchBarCancelButtonClicked")
         searchActive = false;
     }
     
@@ -293,7 +307,7 @@ class BoxOfficeViewController: UIViewController, UITableViewDelegate, UITableVie
         searchActive = false;
     }
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        
+     //   print("textDidChange")
         filterMovies = movies.filter({ (movie) -> Bool in
             let tmp: NSDictionary = movie
             let range = tmp["title"]!.rangeOfString(searchText, options: NSStringCompareOptions.CaseInsensitiveSearch)

@@ -31,7 +31,7 @@ Time spent: 20 hours
 
 ### Issue:
 
-- The error network view not show animation and appearent when pull to refresh.
+- (fixed)The error network view not show animation and appearent when pull to refresh.
 
 ### 3rd party libraries
 
